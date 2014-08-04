@@ -6,5 +6,11 @@ class User < ActiveRecord::Base
   validates :email, :presence => true,
                     :format => /\A(\S+)@(.+)\.(\S+)\z/i,
                     :uniqueness => {:case_sensitive => false}
+  validates :username, :presence => true,
+                       :uniqueness => {:case_sensitive => false}
+
+  def gravatar_id
+    Digest::MD5::hexdigest(email.downcase)
+  end
 
 end

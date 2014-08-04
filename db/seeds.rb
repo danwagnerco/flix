@@ -1,11 +1,3 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-
 Movie.create!([
   {
     title: 'Iron Man',
@@ -110,3 +102,29 @@ movie.reviews.create!(name: "Gene Siskel", stars: 5, comment: "I'm a better revi
 movie.reviews.create!(name: "Peter Travers", stars: 4, comment: "It's been years since a movie superhero was this fierce and this funny.")
 movie = Movie.find_by(title: 'Superman')
 movie.reviews.create!(name: "Elvis Mitchell", stars: 5, comment: "It's a bird, it's a plane, it's a blockbuster!")
+
+User.create!(
+    [
+      {
+        :name                  => "Dan",
+        :email                 => "dan@example.com",
+        :password              => "secret",
+        :password_confirmation => "secret",
+        :username              => "dadidas07"
+      },
+      {
+        :name                  => "Kelly",
+        :email                 => "kelly@example.com",
+        :password              => "secret",
+        :password_confirmation => "secret",
+        :username              => "kelculator87"
+      },
+      {
+        :name                  => "Billy",
+        :email                 => "bill@example.com",
+        :password              => "secret",
+        :password_confirmation => "secret",
+        :username              => "billyturner90"
+      }
+    ]
+  )
