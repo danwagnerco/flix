@@ -107,10 +107,28 @@ describe "A user" do
     it "encrypts password into digest attribute" do
       expect(@test_user.password_digest).to be_present
     end
-
   end
 
-  context "::update" do
+  context "#authenticate" do
+    before do
+      @user = User.create!(user_attributes)
+    end
+
+    it "returns not true if the email isn't found" do
+      expect(User.authenticate("nomatch", @user.password)).not_to be_true
+    end
+
+    it "returns not true if the password isn't found" do
+      expect(User.authenticate(@user.email, "nomatch")).not_to be_true
+    end
+
+    it "returns user obj if pass and email match" do
+      expect(User.authenticate(@user.email, @user.password)).to eql(@user)
+    end
+
+    it "returns user obj if username and email match" do
+      expect(User.authenticate(@user.username, @user.password)).to eql(@user)
+    end
   end
 
 end
