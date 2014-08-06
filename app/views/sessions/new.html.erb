@@ -5,8 +5,8 @@
 <%= form_tag(session_path) do %>
 <fieldset>
   <p>
-    <%= label_tag :email %>
-    <%= email_field_tag :email, nil, :autofocus => true, :required => true %>
+    <%= label_tag :email_or_username, "Email or Username" %>
+    <%= text_field_tag :email_or_username, nil, :autofocus => true, :required => true %>
   </p>
   <p>
     <%= label_tag :password %>
