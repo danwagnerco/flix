@@ -18,6 +18,7 @@ describe "User sign in" do
 
 		expect(current_path).to eql(user_path(u))
 		expect(page).to have_text("Welcome back, #{u.name}!")
+		expect(page).to have_link("Sign Out")
 		expect(page).not_to have_link("Sign In")
 		expect(page).not_to have_link("Sign Up")
 	end
@@ -52,6 +53,7 @@ describe "User sign in" do
 		visit root_url
 
 		expect(page).to have_text("Example User")
+		expect(page).to have_link("Sign Out")
 		expect(page).not_to have_text("Sign In")
 		expect(page).not_to have_text("Sign Up")
 	end
