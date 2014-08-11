@@ -2,9 +2,6 @@ require_relative("../spec_helper")
 
 describe "Deleting a user" do
 
-	before(:all) do
-	end
-
 	it "destroys the user and returns to root" do
 		u = User.create!(user_attributes)
 
@@ -18,6 +15,16 @@ describe "Deleting a user" do
 		visit users_path
 
 		expect(page).not_to have_text(u.name)
+	end
+
+	it "signs the user out when deleting account" do
+		u = User.create!(user_attributes)
+		sign_in(u)
+
+		click_link "Delete Account"
+
+		expect(page).to have_link("Sign In")
+		expect(page).not_to have_link("Sign Out")
 	end
 
 end
