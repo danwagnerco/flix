@@ -2,9 +2,6 @@ require_relative("../spec_helper")
 
 describe "Creating a user" do
 
-	before(:all) do
-	end
-
 	it "generates a new user with good input" do
 		visit root_url
 		click_link "Sign Up"

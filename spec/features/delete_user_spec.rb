@@ -4,6 +4,7 @@ describe "Deleting a user" do
 
 	it "destroys the user and returns to root" do
 		u = User.create!(user_attributes)
+		sign_in(u)
 
 		visit user_path(u)
 

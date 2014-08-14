@@ -25,6 +25,8 @@ describe "Viewing the list of users" do
                       :password_confirmation => "secret"
                       )
 
+    sign_in(u1)
+
     visit users_url
 
     expect(page).to have_link(u1.name)
