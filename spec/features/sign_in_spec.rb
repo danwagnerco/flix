@@ -1,7 +1,6 @@
 require_relative("../spec_helper")
 
 describe "User sign in" do
-
 	it "shows the users profile page on success" do
 		u = User.create!(user_attributes)
 		visit root_url
@@ -73,4 +72,17 @@ describe "User sign in" do
 
 		expect(current_path).to eql(edit_user_path(u))
 	end
+
+	it "redirects to the intended path" do
+		u = User.create!(user_attributes)
+		visit users_url
+
+		expect(current_path).to eql(new_session_path)
+		expect(page).to have_text("Please sign in first!")
+
+		sign_in(u)
+
+		expect(current_path).to eql(users_path)
+	end
+
 end
