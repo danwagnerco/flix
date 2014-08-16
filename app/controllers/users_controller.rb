@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   before_action :require_signin, :except => [:new, :create]
   before_action :require_correct_user, :only => [:edit, :update, :destroy]
+  # code below would only allow admins to delete user accounts
+  # before_action :require_admin, :only => [:destroy]
 
   def index
     @users = User.all
@@ -36,6 +38,10 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    # code below would only allow admins to delete user accounts
+    # @user = User.find(:params[:id])
+    # @user.destroy
+    # redirect_to root_url, :notice => "Account successfully deleted!"
     @user.destroy
     session[:user_id] = nil
     redirect_to root_url, :notice => "Account successfully deleted!"
