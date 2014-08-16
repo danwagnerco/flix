@@ -110,21 +110,24 @@ User.create!(
         :email                 => "dan@example.com",
         :password              => "secret",
         :password_confirmation => "secret",
-        :username              => "dadidas07"
+        :username              => "dadidas07",
+        :admin                 => true
       },
       {
         :name                  => "Kelly",
         :email                 => "kelly@example.com",
         :password              => "secret",
         :password_confirmation => "secret",
-        :username              => "kelculator87"
+        :username              => "kelculator87",
+        :admin                 => false
       },
       {
         :name                  => "Billy",
         :email                 => "bill@example.com",
         :password              => "secret",
         :password_confirmation => "secret",
-        :username              => "billyturner90"
+        :username              => "billyturner90",
+        :admin                 => false
       }
     ]
   )
