@@ -16,13 +16,13 @@ describe "A review" do
     expect(review.valid?).to be_true
   end
 
-  it "requires a name" do
-    review = Review.new(name: "")
+  # it "requires a name" do
+  #   review = Review.new(name: "")
 
-    review.valid? # populates errors
+  #   review.valid? # populates errors
     
-    expect(review.errors[:name].any?).to be_true
-  end
+  #   expect(review.errors[:name].any?).to be_true
+  # end
 
   it "requires a comment" do
     review = Review.new(comment: "")

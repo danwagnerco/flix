@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe "Creating a new review" do
+
+  before do
+    @user = User.create!(user_attributes)
+    sign_in(@user)
+  end
+
   it "saves the review and shows the review on the movie's detail page" do
     movie = Movie.create!(movie_attributes)
 
@@ -10,7 +16,8 @@ describe "Creating a new review" do
 
     expect(current_path).to eq(new_movie_review_path(movie))
 
-    fill_in "Name", with: "Roger Ebert"
+    # fill_in "Name", with: "Roger Ebert"
+    expect(page).to have_text(@user.name)
     choose "review_stars_3"
     fill_in "Comment", with: "I laughed, I cried, I spilled my popcorn!"
 

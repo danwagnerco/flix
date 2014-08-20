@@ -8,7 +8,7 @@ describe MoviesController do
 
   context "when not signed in as admin" do
   	before do
-  		@user        = User.create!(user_attributes)
+  		@user             = User.create!(user_attributes)
   		session[:user_id] = @user.id
   	end
 

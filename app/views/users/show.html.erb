@@ -6,6 +6,21 @@
     <h2><%= @user.username %></h2>
     <h4><%= format_member_since_date(@user) %><h4>
   </header>
+  <% if @reviews.any? %>
+    <h3>Reviews</h3>
+    <ol id="reviews">
+      <li>
+        <% @reviews.each do |review| %>
+          <%= link_to review.movie.name, review.movie %>
+          <span class="review"><%= pluralize(review.stars, "star") %></span>
+          <span class="date"><%= time_ago_in_words(review.created_at) %></span>
+          <p>
+            &quot;<%= review.comment %>
+          </p>
+        <% end %>
+      </li>
+    </ol>
+  <% end %>
   <footer>
     <nav>
       <% if current_user?(@user) %>

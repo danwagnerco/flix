@@ -5,7 +5,8 @@ module UsersHelper
     join_date.strftime("Member Since %B %Y")
   end
 
-  def profile_image_for(user)
+  def profile_image_for(user, options={})
+    size = options[:size] || 80
     gravatar_url = "http://secure.gravatar.com/avatar/#{user.gravatar_id}"
     image_tag(gravatar_url, :alt => user.name)
   end
