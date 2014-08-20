@@ -147,4 +147,18 @@ describe "A user" do
     expect(user.reviews).to include(review2)
   end
 
+  context "favorites" do
+    it "has movies that the user is a fan of" do
+      movie1 = Movie.new(movie_attributes(:title => "Forest Gump"))
+      movie2 = Movie.new(movie_attributes(:title => "Harry Potter"))
+      user   = User.new(user_attributes)
+
+      user.favorites.new(:movie => movie1)
+      user.favorites.new(:movie => movie2)
+
+      expect(user.favorite_movies).to include(movie1)
+      expect(user.favorite_movies).to include(movie2)
+    end
+  end
+
 end

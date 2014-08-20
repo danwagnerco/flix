@@ -12,6 +12,15 @@
   <h3 class="no-rule">
     <%= @movie.rating %> &bull; <%= @movie.duration %> 
   </h3>
+  <% if @fans.any? %>
+    <h3><%= pluralize(@fans.size, "Fan") %></h3>
+    <ul>
+      <% @fans.each do |user| %>
+        <%= profile_image_for(user, :size => 35) %>
+        <li><%= link_to user.name, user %>
+      <% end %>
+    </ul>
+  <% end %>
   
   <h3>Cast</h3>
   <p>
