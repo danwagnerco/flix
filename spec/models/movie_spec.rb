@@ -188,5 +188,19 @@ describe "A movie" do
       expect(Movie.flops).to eq([movie2])
     end
   end
+
+  context "fans" do
+    it "has users who favorited the movie" do
+      movie = Movie.create!(movie_attributes)
+      fan1  = User.create!(user_attributes(:email => "gorb@test.com", :username => "gorb"))
+      fan2  = User.create!(user_attributes(:email => "jimjoe@test.com", :username => "jimjoe"))
+      
+      movie.favorites.new(:user => fan1)
+      movie.favorites.new(:user => fan2)
+
+      expect(movie.fans).to include(fan1)
+      expect(movie.fans).to include(fan2)
+    end
+  end
   
 end
