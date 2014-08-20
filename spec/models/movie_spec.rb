@@ -189,14 +189,14 @@ describe "A movie" do
     end
   end
 
-  context "fans" do
-    it "has users who favorited the movie" do
+  context "has fans" do
+    it "users who favorited the movie" do
       movie = Movie.create!(movie_attributes)
       fan1  = User.create!(user_attributes(:email => "gorb@test.com", :username => "gorb"))
       fan2  = User.create!(user_attributes(:email => "jimjoe@test.com", :username => "jimjoe"))
       
-      movie.favorites.new(:user => fan1)
-      movie.favorites.new(:user => fan2)
+      movie.fans << fan1
+      movie.fans << fan2
 
       expect(movie.fans).to include(fan1)
       expect(movie.fans).to include(fan2)
