@@ -21,6 +21,14 @@
       <% end %>
     </ul>
   <% end %>
+  <% if current_user %>
+    <% if @current_favorite %>
+      <%= button_to "Unfavorite!", movie_favorite_path(@movie, @current_favorite), 
+      :method => :delete %>
+    <% else %>
+      <%= button_to "Favorite!", movie_favorites_path(@movie) %>
+    <% end %>
+  <% end %>
   
   <h3>Cast</h3>
   <p>
