@@ -138,3 +138,18 @@ iron_man.fans << User.find_by(:email => "kelly@example.com")
 
 superman = Movie.find_by(:title => "Superman")
 superman.fans << User.find_by(:email => "bill@example.com")
+
+Genre.create!(
+  [
+    {:name => "Action"},
+    {:name => "Comedy"},
+    {:name => "Drama"},
+    {:name => "Romance"},
+    {:name => "Thriller"},
+    {:name => "Fantasy"},
+    {:name => "Documentary"},
+    {:name => "Adventure"},
+    {:name => "Animation"},
+    {:name => "Sci-Fi"}
+  ]
+)
