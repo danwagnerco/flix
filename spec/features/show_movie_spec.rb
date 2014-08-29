@@ -14,7 +14,32 @@ describe "Viewing an individual movie" do
     expect(page).to have_text(movie.director)
     expect(page).to have_text(movie.duration)
     expect(page).to have_selector("img[src$='#{movie.image_file_name}']")
-  end  
+  end
+
+  it "displays a movies fans and genres in sidebar" do
+    movie  = Movie.create!(movie_attributes)
+    user   = User.create!(user_attributes)
+    genre  = Genre.create(:name => "Genre1")
+
+    movie.fans << user
+    movie.genres << genre
+
+    visit movie_url(movie)
+
+    within("aside#sidebar") do
+      expect(page).to have_text(user.name)
+      expect(page).to have_text(genre.name)
+    end
+
+  end
+
+  it "contains the name of the movie and year in the page title" do
+    movie = Movie.create!(movie_attributes)
+
+    visit movie_url(movie)
+
+    expect(page).to have_title("Flix - #{movie.title} (#{movie.released_on.year})")
+  end
   
   it "shows the total gross if the total gross exceeds $50M" do
     movie = Movie.create!(movie_attributes(total_gross: 60000000))

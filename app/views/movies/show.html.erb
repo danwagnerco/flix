@@ -1,3 +1,4 @@
+<% title("#{@movie.title} (#{@movie.released_on.year})") %>
 <article id="movie" class="movie">
   <header>
     <%= image_for(@movie) %>
@@ -12,21 +13,7 @@
   <h3 class="no-rule">
     <%= @movie.rating %> &bull; <%= @movie.duration %> 
   </h3>
-  <h3><%= pluralize(@genres.size, "Genre") %></h3>
-  <% @genres.each do |genre| %>
-    <ul>
-      <li><%= genre.name %></li>
-    </ul>
-  <% end %>
-  <% if @fans.any? %>
-    <h3><%= pluralize(@fans.size, "Fan") %></h3>
-    <ul>
-      <% @fans.each do |user| %>
-        <%= profile_image_for(user, :size => 35) %>
-        <li><%= link_to user.name, user %>
-      <% end %>
-    </ul>
-  <% end %>
+  
   <% if current_user %>
     <% if @current_favorite %>
       <%= button_to "Unfavorite!", movie_favorite_path(@movie, @current_favorite), 
@@ -75,3 +62,21 @@
     </nav>
   </footer>
 </article>
+
+<% content_for(:side) do %>
+  <% if @fans.any? %>
+    <h3><%= pluralize(@fans.size, "Fan") %></h3>
+    <ul>
+      <% @fans.each do |user| %>
+        <%= profile_image_for(user, :size => 35) %>
+        <li><%= link_to user.name, user %>
+      <% end %>
+    </ul>
+  <% end %>
+    <h3><%= pluralize(@genres.size, "Genre") %></h3>
+  <% @genres.each do |genre| %>
+    <ul>
+      <li><%= genre.name %></li>
+    </ul>
+  <% end %>
+<% end %>
