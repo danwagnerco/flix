@@ -13,6 +13,17 @@ class User < ActiveRecord::Base
   validates :username, :presence => true,
                        :uniqueness => {:case_sensitive => false}
 
+  scope :by_name, -> { order(:name => :asc) }
+  scope :no_admins, -> { where("admin = false") }
+  scope :no_admins_by_name, -> { no_admins.by_name }
+
+  # scope :released, -> { where("released_on <= ?", Time.now).order(:released_on => :desc) }
+  # scope :hits, -> { where("total_gross >= 300000000").order(:total_gross => :desc) }
+  # scope :flops, -> { where("total_gross < 50000000").order(:total_gross => :asc) }
+  # scope :upcoming, -> { where("released_on > ?", Time.now).order(:released_on => :desc) }
+  # scope :recent, ->(max=5) { released.limit(max) }
+  # scope :rated, ->(rating) { where("rating = ?", rating) }
+
   def self.authenticate(email_or_username, password)
     user = User.find_by(:email => email_or_username) || 
            User.find_by(:username => email_or_username) 

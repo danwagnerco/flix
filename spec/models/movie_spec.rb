@@ -1,152 +1,154 @@
-require 'spec_helper'
+require_relative('../spec_helper')
 
 describe "A movie" do
-  it "requires a title" do
-    movie = Movie.new(title: "")
+  context "validations" do
+    it "requires a title" do
+      movie = Movie.new(title: "")
+      movie.valid? # populates errors
+      
+      expect(movie.errors[:title].any?).to be_true
+    end
     
-    movie.valid? # populates errors
-    
-    expect(movie.errors[:title].any?).to be_true
-  end
-  
-  it "requires a description" do
-    movie = Movie.new(description: "")
-    
-    movie.valid?
-
-    expect(movie.errors[:description].any?).to be_true
-  end
-  
-  it "requires a released on date" do
-    movie = Movie.new(released_on: "")
-    
-    movie.valid?
-
-    expect(movie.errors[:released_on].any?).to be_true
-  end
-  
-  it "requires a duration" do
-    movie = Movie.new(duration: "")
-    
-    movie.valid?
-
-    expect(movie.errors[:duration].any?).to be_true
-  end
-  
-  it "requires a description over 24 characters" do
-    movie = Movie.new(description: "X" * 24)
-    
-    movie.valid?
-
-    expect(movie.errors[:description].any?).to be_true
-  end
-  
-  it "accepts a $0 total gross" do
-    movie = Movie.new(total_gross: 0.00)
-
-    movie.valid?
-
-    expect(movie.errors[:total_gross].any?).to be_false
-  end
-  
-  it "accepts a positive total gross" do
-    movie = Movie.new(total_gross: 10000000.00)
-
-    movie.valid?
-
-    expect(movie.errors[:total_gross].any?).to be_false
-  end
-  
-  it "rejects a negative total gross" do
-    movie = Movie.new(total_gross: -10000000.00)
-
-    movie.valid?
-
-    expect(movie.errors[:total_gross].any?).to be_true
-  end
-  
-  it "accepts properly formatted image file names" do
-    file_names = %w[e.png movie.png movie.jpg movie.gif MOVIE.GIF]
-    file_names.each do |file_name|
-      movie = Movie.new(image_file_name: file_name)
+    it "requires a description" do
+      movie = Movie.new(description: "")
       movie.valid?
-      expect(movie.errors[:image_file_name].any?).to be_false
+
+      expect(movie.errors[:description].any?).to be_true
+    end
+    
+    it "requires a released on date" do
+      movie = Movie.new(released_on: "")
+      movie.valid?
+
+      expect(movie.errors[:released_on].any?).to be_true
+    end
+    
+    it "requires a duration" do
+      movie = Movie.new(duration: "")
+      movie.valid?
+
+      expect(movie.errors[:duration].any?).to be_true
+    end
+    
+    it "requires a description over 24 characters" do
+      movie = Movie.new(description: "X" * 24)
+      movie.valid?
+
+      expect(movie.errors[:description].any?).to be_true
+    end
+    
+    it "accepts a $0 total gross" do
+      movie = Movie.new(total_gross: 0.00)
+      movie.valid?
+
+      expect(movie.errors[:total_gross].any?).to be_false
+    end
+    
+    it "accepts a positive total gross" do
+      movie = Movie.new(total_gross: 10000000.00)
+      movie.valid?
+
+      expect(movie.errors[:total_gross].any?).to be_false
+    end
+    
+    it "rejects a negative total gross" do
+      movie = Movie.new(total_gross: -10000000.00)
+      movie.valid?
+
+      expect(movie.errors[:total_gross].any?).to be_true
+    end
+    
+    it "accepts properly formatted image file names" do
+      file_names = %w[e.png movie.png movie.jpg movie.gif MOVIE.GIF]
+      file_names.each do |file_name|
+        movie = Movie.new(image_file_name: file_name)
+        movie.valid?
+        expect(movie.errors[:image_file_name].any?).to be_false
+      end
+    end
+    
+    it "rejects improperly formatted image file names" do
+      file_names = %w[movie .jpg .png .gif movie.pdf movie.doc]
+      file_names.each do |file_name|
+        movie = Movie.new(image_file_name: file_name)
+        movie.valid?
+        expect(movie.errors[:image_file_name].any?).to be_true
+      end
+    end
+    
+    it "accepts any rating that is in an approved list" do
+      ratings = %w[G PG PG-13 R NC-17]
+      ratings.each do |rating|
+        movie = Movie.new(rating: rating)
+        movie.valid?
+        expect(movie.errors[:rating].any?).to be_false
+      end
+    end
+    
+    it "rejects any rating that is not in the approved list" do
+      ratings = %w[R-13 R-16 R-18 R-21]
+      ratings.each do |rating|
+        movie = Movie.new(rating: rating)
+        movie.valid?
+        expect(movie.errors[:rating].any?).to be_true
+      end
+    end
+    
+    it "is valid with example attributes" do
+      movie = Movie.new(movie_attributes)
+      
+      expect(movie.valid?).to be_true
     end
   end
-  
-  it "rejects improperly formatted image file names" do
-    file_names = %w[movie .jpg .png .gif movie.pdf movie.doc]
-    file_names.each do |file_name|
-      movie = Movie.new(image_file_name: file_name)
-      movie.valid?
-      expect(movie.errors[:image_file_name].any?).to be_true
-    end
-  end
-  
-  it "accepts any rating that is in an approved list" do
-    ratings = %w[G PG PG-13 R NC-17]
-    ratings.each do |rating|
-      movie = Movie.new(rating: rating)
-      movie.valid?
-      expect(movie.errors[:rating].any?).to be_false
-    end
-  end
-  
-  it "rejects any rating that is not in the approved list" do
-    ratings = %w[R-13 R-16 R-18 R-21]
-    ratings.each do |rating|
-      movie = Movie.new(rating: rating)
-      movie.valid?
-      expect(movie.errors[:rating].any?).to be_true
-    end
-  end
-  
-  it "is valid with example attributes" do
-    movie = Movie.new(movie_attributes)
     
-    expect(movie.valid?).to be_true
-  end
-  
-  it "is a flop if the total gross is less than $50M" do
-    movie = Movie.new(total_gross: 40000000)
-
-    expect(movie).to be_flop
-  end
-  
-  it "is not a flop if the total gross is greater than $50M" do
-    movie = Movie.new(total_gross: 60000000)
-
-    expect(movie).not_to be_flop
-  end
-  
-  it "has many reviews" do
-    movie = Movie.new(movie_attributes)
-
-    review1 = movie.reviews.new(review_attributes)
-    review2 = movie.reviews.new(review_attributes)
-
-    expect(movie.reviews).to include(review1)
-    expect(movie.reviews).to include(review2)
-  end
-
-  it "deletes associated reviews" do
-    movie = Movie.create!(movie_attributes)
-
-    movie.reviews.create!(review_attributes)
-
-    expect { 
-      movie.destroy
-    }.to change(Review, :count).by(-1)
-  end
-  
-  it "calculates the average number of review stars" do
-    movie = Movie.create!(movie_attributes)
-
-    movie.reviews.create!(review_attributes(stars: 1))
-    movie.reviews.create!(review_attributes(stars: 3))
-    movie.reviews.create!(review_attributes(stars: 5))
+  context "check flop" do
     
-    expect(movie.average_stars).to eq(3)
+    it "is a flop if the total gross is less than $50M" do
+      movie = Movie.new(total_gross: 40000000)
+
+      expect(movie).to be_flop
+    end
+    
+    it "is not a flop if the total gross is greater than $50M" do
+      movie = Movie.new(total_gross: 60000000)
+
+      expect(movie).not_to be_flop
+    end
+
+  end
+    
+  context "check reviews" do
+
+    it "has many reviews" do
+      movie = Movie.new(movie_attributes)
+
+      review1 = movie.reviews.new(review_attributes)
+      review2 = movie.reviews.new(review_attributes)
+
+      expect(movie.reviews).to include(review1)
+      expect(movie.reviews).to include(review2)
+    end
+
+    it "deletes associated reviews" do
+      movie = Movie.create!(movie_attributes)
+
+      movie.reviews.create!(review_attributes)
+
+      expect { 
+        movie.destroy
+      }.to change(Review, :count).by(-1)
+    end
+    
+    it "calculates the average number of review stars" do
+      movie = Movie.create!(movie_attributes)
+
+      movie.reviews.create!(review_attributes(stars: 1))
+      movie.reviews.create!(review_attributes(stars: 3))
+      movie.reviews.create!(review_attributes(stars: 5))
+      
+      expect(movie.average_stars).to eq(3)
+    end
+
   end
   
   context "released query" do
@@ -171,7 +173,7 @@ describe "A movie" do
     end
   end
 
-  context "hits query" do
+  context "hits scope" do
     it "returns movies with a total gross of at least 300_000_000" do
       movie1 = Movie.create!(movie_attributes(total_gross: 300_000_000))
       movie2 = Movie.create!(movie_attributes(total_gross: 9_000_000))
@@ -188,6 +190,45 @@ describe "A movie" do
       expect(Movie.flops).to eq([movie2])
     end
   end
+
+  context "upcoming query" do
+    it "returns the movies with a released on date in the future" do
+      movie1 = Movie.create(movie_attributes(released_on: 3.months.ago))
+      movie2 = Movie.create(movie_attributes(released_on: 3.months.from_now))
+
+      expect(Movie.upcoming).to eq([movie2])
+    end
+  end
+
+  context "rated query" do
+    it "returns released movies with the specified rating" do
+      movie1 = Movie.create(movie_attributes(released_on: 3.months.ago, rating: "PG"))
+      movie2 = Movie.create(movie_attributes(released_on: 3.months.ago, rating: "PG-13"))
+      movie3 = Movie.create(movie_attributes(released_on: 1.month.from_now, rating: "PG"))
+
+      expect(Movie.rated("PG")).to eq([movie1, movie3])
+    end
+  end
+
+  context "recent query" do
+    before do
+      @movie1 = Movie.create(movie_attributes(released_on: 3.months.ago))
+      @movie2 = Movie.create(movie_attributes(released_on: 2.months.ago))
+      @movie3 = Movie.create(movie_attributes(released_on: 1.months.ago))
+      @movie4 = Movie.create(movie_attributes(released_on: 1.week.ago))
+      @movie5 = Movie.create(movie_attributes(released_on: 1.day.ago))
+      @movie6 = Movie.create(movie_attributes(released_on: 1.hour.ago))
+      @movie7 = Movie.create(movie_attributes(released_on: 1.day.from_now))
+    end
+
+  it "returns a specified number of released movies ordered with the most recent movie first" do
+    expect(Movie.recent(2)).to eq([@movie6, @movie5])
+  end
+
+  it "returns a default of 5 released movies ordered with the most recent movie first" do
+    expect(Movie.recent).to eq([@movie6, @movie5, @movie4, @movie3, @movie2])
+  end
+end
 
   context "has fans" do
     it "users who favorited the movie" do
