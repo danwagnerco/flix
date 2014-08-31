@@ -1,4 +1,6 @@
 class Movie < ActiveRecord::Base
+  before_validation :generate_slug
+
   has_many :reviews, :dependent => :destroy
   has_many :favorites, :dependent => :destroy
   has_many :fans, :through => :favorites, :source => :user
@@ -10,8 +12,8 @@ class Movie < ActiveRecord::Base
   # has_many :critics, :through => :reviews, :source => :user
 
   RATINGS = %w(G PG PG-13 R NC-17)
-  validates :title, presence: true
-  validates :released_on, :duration, presence: true
+  validates :title, :presence => true, :uniqueness => true
+  validates :released_on, :duration, :presence => true
   validates :description, length: { minimum: 25 }
   validates :total_gross, numericality: { greater_than_or_equal_to: 0 }
   validates :image_file_name, allow_blank: true, format: {
@@ -19,6 +21,7 @@ class Movie < ActiveRecord::Base
     message: "must reference a GIF, JPG, or PNG image"
   }
   validates :rating, inclusion: { in: RATINGS }
+  validates :slug, :presence => true, :uniqueness => true
 
   scope :released, -> { where("released_on <= ?", Time.now).order(:released_on => :desc) }
   scope :hits, -> { where("total_gross >= 300000000").order(:total_gross => :desc) }
@@ -34,4 +37,14 @@ class Movie < ActiveRecord::Base
   def average_stars
     reviews.average(:stars)
   end
+
+  def to_param
+    slug
+  end
+
+  def generate_slug
+    self.slug ||= title.parameterize if title
+  end
+
+
 end

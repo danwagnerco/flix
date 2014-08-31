@@ -221,14 +221,14 @@ describe "A movie" do
       @movie7 = Movie.create(movie_attributes(released_on: 1.day.from_now))
     end
 
-  it "returns a specified number of released movies ordered with the most recent movie first" do
-    expect(Movie.recent(2)).to eq([@movie6, @movie5])
-  end
+    it "returns a specified number of released movies ordered with the most recent movie first" do
+      expect(Movie.recent(2)).to eq([@movie6, @movie5])
+    end
 
-  it "returns a default of 5 released movies ordered with the most recent movie first" do
-    expect(Movie.recent).to eq([@movie6, @movie5, @movie4, @movie3, @movie2])
+    it "returns a default of 5 released movies ordered with the most recent movie first" do
+      expect(Movie.recent).to eq([@movie6, @movie5, @movie4, @movie3, @movie2])
+    end
   end
-end
 
   context "has fans" do
     it "users who favorited the movie" do
@@ -241,6 +241,32 @@ end
 
       expect(movie.fans).to include(fan1)
       expect(movie.fans).to include(fan2)
+    end
+  end
+
+  context "has a slug" do
+    it "with a newly-created movie" do
+      movie = Movie.create!(movie_attributes(:title => "X-Men: The Last Stand"))
+
+      expect(movie.slug).to eq("x-men-the-last-stand")
+    end
+
+    it "requires a unique title" do
+      movie1 = Movie.create!(movie_attributes)
+      movie2 = Movie.new(:title => movie1.title)
+
+      movie2.valid? # populates errors
+
+      expect(movie2.errors[:title].first).to eq("has already been taken")
+    end
+
+    it "requires a unique slug" do
+      movie1 = Movie.create!(movie_attributes)
+      movie2 = Movie.new(:slug => movie1.slug)
+
+      movie2.valid? # populates errors
+
+      expect(movie2.errors[:slug].first).to eq("has already been taken")
     end
   end
   
