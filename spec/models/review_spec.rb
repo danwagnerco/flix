@@ -58,4 +58,5 @@ describe "A review" do
       expect(review.errors[:stars].first).to eq("must be between 1 and 5")
     end
   end
+
 end

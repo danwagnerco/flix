@@ -194,6 +194,8 @@ describe "A user" do
                                            :email    => "dan@crossfaderking.com",
                                            :username => "Dan",
                                            :admin    => true))
+
+      expect(User.no_admins_by_name).to eq([user3, user1, user2])
     end
   end
 

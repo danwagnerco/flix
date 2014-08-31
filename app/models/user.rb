@@ -14,8 +14,7 @@ class User < ActiveRecord::Base
                        :uniqueness => {:case_sensitive => false}
 
   scope :by_name, -> { order(:name => :asc) }
-  scope :no_admins, -> { where("admin = false") }
-  scope :no_admins_by_name, -> { no_admins.by_name }
+  scope :no_admins_by_name, -> { by_name.where(:admin => false) }
 
   # scope :released, -> { where("released_on <= ?", Time.now).order(:released_on => :desc) }
   # scope :hits, -> { where("total_gross >= 300000000").order(:total_gross => :desc) }
