@@ -2,7 +2,16 @@
   <nav>
     <ul>
       <li class="movies">
-        <%= link_to 'All Movies', movies_path, class: 'button' %>
+        <%= nav_link_to("Released", movies_path) %>
+      </li>
+      <li class="movies">
+        <%= nav_link_to("Hits", filtered_movies_path(:hits)) %>
+      </li>
+      <li class="movies">
+        <%= nav_link_to("Upcoming", filtered_movies_path(:upcoming)) %>
+      </li>
+      <li class="movies">
+        <%= nav_link_to("Recent", filtered_movies_path(:recent)) %>
       </li>
       <% if current_user_admin? %>
         <li class="create-movie">
