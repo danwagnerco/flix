@@ -19,19 +19,14 @@ class Movie < ActiveRecord::Base
     message: "must reference a GIF, JPG, or PNG image"
   }
   validates :rating, inclusion: { in: RATINGS }
-  
-  def self.released
-    where("released_on <= ?", Time.now).order(released_on: :desc)
-  end
-  
-  def self.hits
-    where('total_gross >= 300000000').order(total_gross: :desc)
-  end
-  
-  def self.flops
-    where('total_gross < 50000000').order(total_gross: :asc)
-  end
-  
+
+  scope :released, -> { where("released_on <= ?", Time.now).order(:released_on => :desc) }
+  scope :hits, -> { where("total_gross >= 300000000").order(:total_gross => :desc) }
+  scope :flops, -> { where("total_gross < 50000000").order(:total_gross => :asc) }
+  scope :upcoming, -> { where("released_on > ?", Time.now).order(:released_on => :desc) }
+  scope :recent, ->(max=5) { released.limit(max) }
+  scope :rated, ->(rating) { where("rating = ?", rating) }
+
   def flop?
     total_gross.blank? || total_gross < 50000000
   end

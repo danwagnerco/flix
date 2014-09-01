@@ -6,6 +6,8 @@ class UsersController < ApplicationController
 
   def index
     @users = User.all
+    # if we only wanted to show non-admins, we could write:
+    # @users = User.no_admins_by_name
   end
 
   def show
