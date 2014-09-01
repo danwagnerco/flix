@@ -19,4 +19,26 @@ describe "Showing a user page" do
     expect(page).to have_text(u1.username)
 	end
 
+  it "shows favorite movies in sidebar" do
+    user  = User.create!(user_attributes)
+    movie = Movie.create!(movie_attributes)
+    user.favorite_movies << movie
+
+    sign_in(user)
+    visit user_url(user)
+
+    within("aside#sidebar") do
+      expect(page).to have_text(movie.title)
+    end
+  end
+
+  it "shows the users name in the page title" do
+    user = User.create!(user_attributes)
+
+    sign_in(user)
+    visit user_url(user)
+
+    expect(page).to have_title("Flix - #{user.name}")
+  end
+
 end
